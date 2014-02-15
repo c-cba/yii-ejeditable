@@ -84,7 +84,7 @@ class EJEditable extends CJuiWidget
 				$(this).editable(url, options);
 			});
 		}";
-		Yii::app()->getClientScript()->registerScript(__CLASS__ . "_$id", $jscode, CClientScript::POS_HEAD);
+		Yii::app()->getClientScript()->registerScript(__CLASS__ . "_{$this->selector}", $jscode, CClientScript::POS_HEAD);
 		
 		// Register js-code that initializes editables when page has loaded and is ready
 		Yii::app()->clientScript->registerScript(
