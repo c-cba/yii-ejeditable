@@ -31,10 +31,10 @@ $this->widget('ext.EJEditable.EJEditable', array(
 ));
 ```
 
-- `selector`: a jQuery selector that is used to identify the elements that are to be made editable.
+- `selector` : a jQuery selector that is used to identify the elements that are to be made editable.
 See the [jQuery Documentation](http://api.jquery.com/category/selectors/ "jQuery - Selectors") for a list of possible selectors.
-- `url`: the url to the action that handles the POST request and updates the attribute.
-- `options`: additional options for the Jeditable plugin. 
+- `url` : the url to the action that handles the POST request and updates the attribute.
+- `options` : additional options for the Jeditable plugin. 
 For a list of possible options see the [Jeditable Project Page](http://www.appelsiini.net/projects/jeditable "Jeditable - Project Page").
 
 This extension provides the action 'UpdateAttributeAction' that we can use in the controller `ptotected/controllers/CategoryController.php` to handle the POST request:
@@ -54,7 +54,7 @@ Note: Don't forget to add the action to the `accessRules()` in your controller.
 
 
 #### Usage Example 2 (with dropDown)
-To use a dropdown for edıtıng, we initiate the widget with the following additional options:
+To use a dropdown for editing, we initiate the widget with the following additional options:
 ```php
 $this->widget('ext.EJEditable.EJEditable', array(
 	'selector'=>'.editable',
@@ -65,8 +65,9 @@ $this->widget('ext.EJEditable.EJEditable', array(
 		'submit'=>'OK',
 	)
 ));
+```
 
-Note the last entry. With value of ‘selected’ in array you can tell Jeditable which option should be selected by default.
+Note the last entry. With value of 'selected' in array you can tell Jeditable which option should be selected by default.
 
 #### Usage Example 3 (in CGridView)
 
