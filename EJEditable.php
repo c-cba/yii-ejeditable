@@ -15,11 +15,6 @@ Yii::import('zii.widgets.jui.CJuiWidget');
 class EJEditable extends CJuiWidget
 {
 	/**
-	 * @var string a unique identifier for this EJEditable instance 
-	 * (to allow for multiple widgets in one page).
-	 */
-	public $id = "";
-	/**
 	 * @var string the 'url', first parameter for the Jeditable plugin.
 	 */
 	public $url;
@@ -35,17 +30,17 @@ class EJEditable extends CJuiWidget
 	/**
 	 * @var array the options for the Jeditable plugin
 	 */
-	public $editable_options = array();
+	public $options = array();
 
 	public function init()
 	{
 		// Put together options for jeditable
-		$editable_options_default = array(
+		$options_default = array(
 			'placeholder'=>'',
 			'select'=>true, // the value of the input field will be selected
 		);
-		$par = array_merge($editable_options_default, $this->editable_options);
-		$this->editable_options = $par;
+		$par = array_merge($options_default, $this->options);
+		$this->options = $par;
 		
 		if(empty($this->url)) $this->url = $this->controller->createUrl('updateAttribute');
 		
@@ -67,8 +62,7 @@ class EJEditable extends CJuiWidget
 	 */
 	public function run()
 	{
-		$id = $this->id;
-		$jsoptions = CJavaScript::encode($this->editable_options, true);
+		$jsoptions = CJavaScript::encode($this->options, true);
 		
 		// recursively merge `data_attr` into `options` with $.extend(true,...)
 		$extend_submitdata_code = "";
@@ -82,8 +76,8 @@ class EJEditable extends CJuiWidget
 			";
 		}
 		
-		$jscode = "function init_editable_$id() {
-			$('{$this->selector}').each( function(item) {
+		$jscode = "function init_editable(selector) {
+			$(selector).each( function(item) {
 				var url = '{$this->url}';
 				var options = {$jsoptions};
 				{$extend_submitdata_code}
@@ -94,8 +88,8 @@ class EJEditable extends CJuiWidget
 		
 		// Register js-code that initializes editables when page has loaded and is ready
 		Yii::app()->clientScript->registerScript(
-			"init_editable_$id",
-			"init_editable_$id(); ",
+			"init_editables",
+			"init_editable('{$this->selector}'); ",
 			CClientScript::POS_READY
 		);
 	}
