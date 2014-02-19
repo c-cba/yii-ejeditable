@@ -7,8 +7,8 @@
  *
  * @author C.Yildiz (aka c@cba) <c@cba-solutions.org>
  * @copyright Copyright &copy; 2014 C.Yildiz
- * @license Licensed under MIT license. http://ifdattic.com/MIT-license.txt
- * @version 2.0
+ * @license Licensed under MIT license. http://choosealicense.com/licenses/mit/
+ * @version 1.0
  */
  
 class UpdateAttributeAction extends CAction

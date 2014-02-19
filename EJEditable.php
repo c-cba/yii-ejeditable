@@ -5,6 +5,9 @@
  * {@link http://www.appelsiini.net/projects/jeditable}
  * 
  * @author C.Yildiz (aka c@cba) <c@cba-solutions.org>
+ * @copyright Copyright &copy; 2014 C.Yildiz
+ * @license Licensed under MIT license. http://choosealicense.com/licenses/mit/
+ * @version 1.0
  *
  */
 Yii::import('zii.widgets.jui.CJuiWidget');
@@ -21,12 +24,13 @@ class EJEditable extends CJuiWidget
 	/**
 	 * @var string the identifier of the editable elements.
 	 */
-	public $selector = ".editable";
+	public $jquerySelector = ".editable";
+	public $attribute;
 	/**
 	 * @var boolean whether or not all data-attributes of the editable elements should be added to the POST request 
 	 * (by being concatenated to the "submitdata" parameter of the Jeditable plugin)
 	 */
-	public $submit_data_attributes = true;
+	public $submitDataAttributes = true;
 	/**
 	 * @var array the options for the Jeditable plugin
 	 */
@@ -44,6 +48,7 @@ class EJEditable extends CJuiWidget
 		
 		if(empty($this->url)) $this->url = $this->controller->createUrl('updateAttribute');
 		
+		Yii::app()->clientScript->registerCoreScript('jquery');
 		$cs = Yii::app()->getClientScript();
 		$assets = Yii::app()->getAssetManager()->publish(dirname(__FILE__) . '/assets');
 		$cs->registerScriptFile($assets . '/js/jquery.jeditable.mini.js'); 	
@@ -66,7 +71,7 @@ class EJEditable extends CJuiWidget
 		
 		// recursively merge `data_attr` into `options` with $.extend(true,...)
 		$extend_submitdata_code = "";
-		if($this->submit_data_attributes) {
+		if($this->submitDataAttributes == true) {
 			$extend_submitdata_code = "
 				var data_attr = {'submitdata':{}};
 				$.each($(this).data(), function(i,e) {
@@ -75,21 +80,30 @@ class EJEditable extends CJuiWidget
 				$.extend(true, options, data_attr); 
 			";
 		}
+		$add_attribute_code = "";
+		if(!empty($this->attribute)) {
+			$add_attribute_code = "
+				if(!('attribute' in options['submitdata'])) {
+					options['submitdata']['attribute'] = '{$this->attribute}';
+				}
+			";
+		}
 		
-		$jscode = "function init_editable(selector) {
-			$(selector).each( function(item) {
+		$jscode = "function init_editable(jquerySelector) {
+			$(jquerySelector).each( function(item) {
 				var url = '{$this->url}';
-				var options = {$jsoptions};
-				{$extend_submitdata_code}
+				var options = {$jsoptions}; 
+				{$extend_submitdata_code} 
+				{$add_attribute_code}
 				$(this).editable(url, options);
 			});
 		}";
-		Yii::app()->getClientScript()->registerScript(__CLASS__ . "_{$this->selector}", $jscode, CClientScript::POS_HEAD);
+		Yii::app()->getClientScript()->registerScript(__CLASS__ . "_{$this->jquerySelector}", $jscode, CClientScript::POS_HEAD);
 		
 		// Register js-code that initializes editables when page has loaded and is ready
 		Yii::app()->clientScript->registerScript(
 			"init_editables",
-			"init_editable('{$this->selector}'); ",
+			"init_editable('{$this->jquerySelector}'); ",
 			CClientScript::POS_READY
 		);
 	}
