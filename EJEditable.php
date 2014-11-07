@@ -67,7 +67,7 @@ class EJEditable extends CJuiWidget
 	 */
 	public function run()
 	{
-		$jsoptions = CJavaScript::encode($this->options, true);
+		$jsoptions = CJavaScript::encode($this->options);
 		
 		// recursively merge `data_attr` into `options` with $.extend(true,...)
 		$extend_submitdata_code = "";
